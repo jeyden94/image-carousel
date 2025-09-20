@@ -1,3 +1,48 @@
+:root {
+  --carousel-slide-width: 320px;
+  --carousel-slide-padding-ratio: 8;
+  --carousel-slide-aspect-ratio: calc(9/16);
+  --starting-carousel-slide-offset: calc(var(--carousel-slide-width) / calc(var(--carousel-slide-padding-ratio) * 2));
+}
+
 body {
   background-color: rebeccapurple;
+}
+
+img {
+  width: var(--carousel-slide-width);
+  height: calc(var(--carousel-slide-width) * var(--carousel-slide-aspect-ratio));
+}
+
+.carousel-div-frame {
+  border: 1px solid red;
+  width: calc(var(--carousel-slide-width) + calc(var(--carousel-slide-width) / var(--carousel-slide-padding-ratio)));
+  height: calc(var(--carousel-slide-width) * var(--carousel-slide-aspect-ratio));
+  position: relative;
+}
+
+.carousel-div-wide {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  border: 1px solid blue;
+  width: calc((var(--carousel-slide-width)) * var(--number-of-slides));
+  position: absolute;
+  left: var(--starting-carousel-slide-offset);
+}
+
+.carousel-nav {
+  position: absolute;
+  bottom: -50px;
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }

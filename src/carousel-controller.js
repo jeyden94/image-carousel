@@ -1,9 +1,54 @@
 // createImageCarousel(domContainer, imageFolder)
-// let timer = 5 seconds
 
-// Start function createImageCarousel taking 2 arguments, the dom element and the image folder 
+export function createImageCarousel(carouselParent, imageArray) {
+    
+    document.documentElement.style.setProperty('--number-of-slides', imageArray.length);
 
-    // createDOMElements(domContainer, imageFolder)
+// Start function createImageCarousel taking 2 arguments, the dom element and the image array 
+
+    function createDOMElements(carouselParent, imageArray) {
+        
+        const carouselDivFrame = document.createElement("div")        
+        const carouselDivWide = document.createElement("div");
+        const carouselNav = document.createElement("div")
+
+        carouselDivFrame.classList.add("carousel-div-frame")
+        carouselDivWide.classList.add("carousel-div-wide")
+        carouselNav.classList.add("carousel-nav")
+
+        console.log(carouselDivWide)
+        console.log(carouselDivFrame)
+
+        carouselDivFrame.appendChild(carouselDivWide)
+        carouselParent.appendChild(carouselDivFrame)
+
+        for (let i = -1; i < imageArray.length + 1; i++) {
+
+
+            if (i === -1) {
+                const slide = document.createElement("img");
+                slide.src = imageArray[imageArray.length - 1]; // Last image
+                carouselDivWide.appendChild(slide)
+            } else if (i > -1 && i < imageArray.length) {
+                const slide = document.createElement("img");
+                slide.src = imageArray[i];
+                carouselDivWide.appendChild(slide)
+
+                const slideButton = document.createElement("button")
+                slideButton.classList.add("slide-button")
+                carouselNav.appendChild(slideButton)
+                carouselDivFrame.appendChild(carouselNav)
+            } else {
+                const slide = document.createElement("img");
+                slide.src = imageArray[0];
+                carouselDivWide.appendChild(slide)
+            }
+        }
+
+    }
+
+    createDOMElements(carouselParent, imageArray)
+
     // CREATE / USE NEW FUNCTION -- use a function here that will 
 
         // create a grid that holds the slide nav buttons
@@ -44,6 +89,19 @@
         // after 5 seconds
         // if timer == 0, execute nextSlide()
 
+    let intervalId;
+
+    function startTimer() {
+        if (intervalId) {
+            clearInterval(intervalId)
+        }
+
+        intervalId = setInterval(() => {
+            console.log("hi")
+            // nextSlide()
+        }, 5000)
+    }
+
     // do I need a check timer function?
 
     // resetTimer() //
@@ -54,3 +112,4 @@
         // jumpTo a specific image in the carousal
 
 // close main function
+}
