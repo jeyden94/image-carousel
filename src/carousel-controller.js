@@ -1,7 +1,21 @@
-// createImageCarousel(domContainer, imageFolder)
-
 export function createImageCarousel(carouselParent, imageArray) {
-    
+
+    let intervalId;
+    let activeSlideButton;
+    const startingSlideIndex = 0; // Set preferred starting image
+
+    function startTimer() {
+        if (intervalId) {
+            clearInterval(intervalId)
+        }
+
+        intervalId = setInterval(() => {
+            console.log("hi")
+            nextSlide()
+        }, 5000)
+    }
+    startTimer()
+
     document.documentElement.style.setProperty('--number-of-slides', imageArray.length);
     document.documentElement.style.setProperty('--additional-offset', `0px`);
     let currentSlideIndex = 0;
@@ -11,13 +25,12 @@ export function createImageCarousel(carouselParent, imageArray) {
         const carouselDivFrame = document.createElement("div")        
         const carouselDivWide = document.createElement("div");
         const carouselNav = document.createElement("div")
+        const carouselArrows = document.createElement("div")
 
         carouselDivFrame.classList.add("carousel-div-frame")
         carouselDivWide.classList.add("carousel-div-wide")
         carouselNav.classList.add("carousel-nav")
-
-        console.log(carouselDivWide)
-        console.log(carouselDivFrame)
+        carouselArrows.classList.add("carousel-arrows")
 
         carouselDivFrame.appendChild(carouselDivWide)
         carouselParent.appendChild(carouselDivFrame)
@@ -29,22 +42,23 @@ export function createImageCarousel(carouselParent, imageArray) {
                 slide.src = imageArray[imageArray.length - 1];
                 carouselDivWide.appendChild(slide)
 
-                const slideButton = document.createElement("button")
-                slideButton.classList.add("prev-slide-button")
-                carouselNav.appendChild(slideButton)
-                carouselDivFrame.appendChild(carouselNav)
+                const previousArrow = document.createElement("button")
+                previousArrow.classList.add("prev-slide-button")
+                carouselArrows.appendChild(previousArrow)
+                carouselDivFrame.appendChild(carouselArrows)
 
-                slideButton.addEventListener("click", () => previousSlide())
+                previousArrow.addEventListener("click", () => previousSlide())
 
             } else if (i > -1 && i < imageArray.length) {
+
                 const slide = document.createElement("img");
                 slide.src = imageArray[i];
                 carouselDivWide.appendChild(slide)
 
                 const slideButton = document.createElement("button")
-                slideButton.classList.add("slide-button")
+                slideButton.classList.add("slide-button", `slide-button-${i}`)
                 carouselNav.appendChild(slideButton)
-                carouselDivFrame.appendChild(carouselNav)
+                carouselParent.appendChild(carouselNav)
 
                 slideButton.addEventListener("click", () => jumpToSlide(i))
 
@@ -53,95 +67,59 @@ export function createImageCarousel(carouselParent, imageArray) {
                 slide.src = imageArray[0];
                 carouselDivWide.appendChild(slide)
 
-                const slideButton = document.createElement("button")
-                slideButton.classList.add("next-slide-button")
-                carouselNav.appendChild(slideButton)
-                carouselDivFrame.appendChild(carouselNav)
+                const nextArrow = document.createElement("button")
+                nextArrow.classList.add("next-slide-button")
+                carouselArrows.appendChild(nextArrow)
+                carouselDivFrame.appendChild(carouselArrows)
 
-                slideButton.addEventListener("click", () => nextSlide())
+                nextArrow.addEventListener("click", () => nextSlide())
             }
         }
 
+        const activeSlideButton = document.querySelector(`.slide-button-${startingSlideIndex}`)
+        setActiveSlideButton(startingSlideIndex)
     }
 
     createDOMElements(carouselParent, imageArray)
 
     function jumpToSlide(index) {
+        unsetActiveSlideButton(currentSlideIndex)
         currentSlideIndex = index;
         console.log(currentSlideIndex)
         const slideWidth = getComputedStyle(document.documentElement).getPropertyValue('--carousel-slide-width');
         const slideWidthNum = parseInt(slideWidth);
         const offset = index * slideWidthNum
         document.documentElement.style.setProperty('--additional-offset', `-${offset}px`);
+        startTimer()
+        setActiveSlideButton(index)
     }
 
     function nextSlide() {
         let index = currentSlideIndex + 1;
-        jumpToSlide(index)
-    }
-    // jumpToSlide(2)
-
-    // CREATE / USE NEW FUNCTION -- use a function here that will 
-
-        // create a grid that holds the slide nav buttons
-
-        // create super wide div (that holds the indiviudal slides)
-        // create a picture frame div (that will dictate which of the images in the slide can be seen)
-        // attach the latter to the former as a child
-        // attach the former to the dom
-
-        // enumerate through the images folder and 
-
-            // create an img div for each img 
-            // attach each image that div via it's source
-            // attach each img div as a child to the super wide div
-            // the rest can likely handle w/ css
-            // create a button 
-                // append the button to the grid for slide nav buttons
-                // use the jumpTo function that jumps to a specific slide, pass it the index
-                // from the enumeration process (need to figure this one out, more tricky)
-
-        // create arrows that make the slider move
-            // attach these to the picture frame on the DOM
-            // on click it activates the relevant slider motion function below
-
-
-    // close DOM function
-
-    // nextSlide() /
-    // previousSlide() //
-        // create slider motion
-        // 2 function that moves images from right to left or left to right
-        // these should reset the timner on the timer function
-        // after a click, 5 seconds until the timer fuc
-
-    // autoNextSlide() //
-        // create timer function
-        // this is the tricky one -- this somehow needs to trigger the move-right function
-        // after 5 seconds
-        // if timer == 0, execute nextSlide()
-
-    let intervalId;
-
-    function startTimer() {
-        if (intervalId) {
-            clearInterval(intervalId)
+        if (index === imageArray.length) {
+            jumpToSlide(0)
+        } else {
+            jumpToSlide(index)
         }
-
-        intervalId = setInterval(() => {
-            console.log("hi")
-            // nextSlide()
-        }, 5000)
     }
 
-    // do I need a check timer function?
+    function previousSlide() {
+        let index = currentSlideIndex - 1;
+        if (index === -1) {
+            jumpToSlide(imageArray.length - 1)
+        } else {
+            jumpToSlide(index)
+        }  
+    }
 
-    // resetTimer() //
-    // reset the slider timer
-        // helper function that resets the timer to zero
+    function unsetActiveSlideButton(index) {
+        const activeSlideButton = document.querySelector(`.slide-button-${index}`)
+        activeSlideButton.classList.remove('active');
+    }
 
-    // jumpTo(index) //
-        // jumpTo a specific image in the carousal
+    function setActiveSlideButton(index) {
+        const newActiveSlideButton = document.querySelector(`.slide-button-${index}`)
+        newActiveSlideButton.classList.add('active');
+    }
 
-// close main function
 }

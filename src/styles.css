@@ -1,6 +1,6 @@
 :root {
   --carousel-slide-width: 320px;
-  --carousel-slide-padding-ratio: 8;
+  --carousel-slide-padding-ratio: 2;
   --carousel-slide-aspect-ratio: calc(9/16);
   --starting-carousel-slide-offset: calc(var(--carousel-slide-width) / calc(var(--carousel-slide-padding-ratio) * 2));
 }
@@ -15,35 +15,48 @@ img {
 }
 
 .carousel-div-frame {
-  border: 1px solid red;
   width: calc(var(--carousel-slide-width) + calc(var(--carousel-slide-width) / var(--carousel-slide-padding-ratio)));
   height: calc(var(--carousel-slide-width) * var(--carousel-slide-aspect-ratio));
   position: relative;
+  overflow-x: hidden;
 }
 
 .carousel-div-wide {
   display: grid;
   grid-auto-flow: column;
   justify-content: center;
-  border: 1px solid blue;
   width: calc((var(--carousel-slide-width)) * var(--number-of-slides));
   position: absolute;
   left: calc(var(--starting-carousel-slide-offset) + var(--additional-offset));
-  /* left: var(--starting-carousel-slide-offset); */
 }
 
 .carousel-nav {
-  position: absolute;
   bottom: -50px;
+  width: calc(var(--carousel-slide-width) + calc(var(--carousel-slide-width) / var(--carousel-slide-padding-ratio)));
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.carousel-arrows {
+  position: absolute;
+  bottom: 40%;
   width: 100%;
   display: grid;
   grid-auto-flow: column;
   justify-content: center;
-  gap: 20px;
+  gap: calc(var(--carousel-slide-width) * 2 / 3);
+  opacity: 60%;
 }
 
 button {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+
+.active {
+  opacity: 20%;
 }
