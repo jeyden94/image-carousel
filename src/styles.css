@@ -28,7 +28,8 @@ img {
   border: 1px solid blue;
   width: calc((var(--carousel-slide-width)) * var(--number-of-slides));
   position: absolute;
-  left: var(--starting-carousel-slide-offset);
+  left: calc(var(--starting-carousel-slide-offset) + var(--additional-offset));
+  /* left: var(--starting-carousel-slide-offset); */
 }
 
 .carousel-nav {

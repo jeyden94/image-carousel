@@ -3,8 +3,8 @@
 export function createImageCarousel(carouselParent, imageArray) {
     
     document.documentElement.style.setProperty('--number-of-slides', imageArray.length);
-
-// Start function createImageCarousel taking 2 arguments, the dom element and the image array 
+    document.documentElement.style.setProperty('--additional-offset', `0px`);
+    let currentSlideIndex = 0;
 
     function createDOMElements(carouselParent, imageArray) {
         
@@ -24,11 +24,18 @@ export function createImageCarousel(carouselParent, imageArray) {
 
         for (let i = -1; i < imageArray.length + 1; i++) {
 
-
             if (i === -1) {
                 const slide = document.createElement("img");
-                slide.src = imageArray[imageArray.length - 1]; // Last image
+                slide.src = imageArray[imageArray.length - 1];
                 carouselDivWide.appendChild(slide)
+
+                const slideButton = document.createElement("button")
+                slideButton.classList.add("prev-slide-button")
+                carouselNav.appendChild(slideButton)
+                carouselDivFrame.appendChild(carouselNav)
+
+                slideButton.addEventListener("click", () => previousSlide())
+
             } else if (i > -1 && i < imageArray.length) {
                 const slide = document.createElement("img");
                 slide.src = imageArray[i];
@@ -38,16 +45,41 @@ export function createImageCarousel(carouselParent, imageArray) {
                 slideButton.classList.add("slide-button")
                 carouselNav.appendChild(slideButton)
                 carouselDivFrame.appendChild(carouselNav)
+
+                slideButton.addEventListener("click", () => jumpToSlide(i))
+
             } else {
                 const slide = document.createElement("img");
                 slide.src = imageArray[0];
                 carouselDivWide.appendChild(slide)
+
+                const slideButton = document.createElement("button")
+                slideButton.classList.add("next-slide-button")
+                carouselNav.appendChild(slideButton)
+                carouselDivFrame.appendChild(carouselNav)
+
+                slideButton.addEventListener("click", () => nextSlide())
             }
         }
 
     }
 
     createDOMElements(carouselParent, imageArray)
+
+    function jumpToSlide(index) {
+        currentSlideIndex = index;
+        console.log(currentSlideIndex)
+        const slideWidth = getComputedStyle(document.documentElement).getPropertyValue('--carousel-slide-width');
+        const slideWidthNum = parseInt(slideWidth);
+        const offset = index * slideWidthNum
+        document.documentElement.style.setProperty('--additional-offset', `-${offset}px`);
+    }
+
+    function nextSlide() {
+        let index = currentSlideIndex + 1;
+        jumpToSlide(index)
+    }
+    // jumpToSlide(2)
 
     // CREATE / USE NEW FUNCTION -- use a function here that will 
 
