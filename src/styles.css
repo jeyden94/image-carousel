@@ -1,7 +1,11 @@
 :root {
-  --carousel-slide-width: 480px;
-  --carousel-slide-padding-ratio: 2; /* larger numbers create less padding */
+  --carousel-slide-width: 960px;
+  --button-hover-color: aquamarine;
+
+  --img-padding: calc(var(--carousel-slide-width) / 24);
+  --carousel-slide-padding-ratio: 2; /* Controls how much of the prev/next slides can be seen. Larger numbers show less. */
   --carousel-slide-aspect-ratio: calc(9/16);
+
   --starting-carousel-slide-offset: calc(var(--carousel-slide-width) / calc(var(--carousel-slide-padding-ratio) * 2));
 }
 
@@ -9,9 +13,14 @@ body {
   background-color: rebeccapurple;
 }
 
-img {
+.slide-wrapper {
   width: var(--carousel-slide-width);
   height: calc(var(--carousel-slide-width) * var(--carousel-slide-aspect-ratio));
+}
+
+img {
+  width: calc(var(--carousel-slide-width) - var(--img-padding));
+  height: calc((var(--carousel-slide-width) - var(--img-padding)) * var(--carousel-slide-aspect-ratio));
 }
 
 .carousel-div-frame {
@@ -31,18 +40,18 @@ img {
 }
 
 .carousel-nav {
-  bottom: -50px;
+  /* bottom: -50px; */
   width: calc(var(--carousel-slide-width) + calc(var(--carousel-slide-width) / var(--carousel-slide-padding-ratio)));
   display: grid;
   grid-auto-flow: column;
   justify-content: center;
   margin-top: 20px;
-  gap: 20px;
+  gap: calc(var(--carousel-slide-width) / 24);
 }
 
 .carousel-arrows {
   position: absolute;
-  bottom: 40%;
+  bottom: 45%;
   width: 100%;
   display: grid;
   grid-auto-flow: column;
@@ -50,7 +59,24 @@ img {
   gap: calc(calc(var(--carousel-slide-width) + 
   calc(var(--carousel-slide-width) / 
   var(--carousel-slide-padding-ratio)))/1.2);
-  opacity: 60%;
+}
+
+.arrow-icon-right,
+.arrow-icon-left {
+  position: relative;
+  width: calc(var(--carousel-slide-width) / 24);
+  height: auto;
+}
+
+.arrow-icon-left {
+  transform: scaleX(-1);
+  right: 18%;
+  top: 3%;
+}
+
+.arrow-icon-right {
+  left: 18%;
+  top: 3%;
 }
 
 .prev-slide-button,
@@ -60,12 +86,27 @@ img {
   border-radius: 50%;
 }
 
+.prev-slide-button:hover,
+.next-slide-button:hover {
+  background-color: var(--button-hover-color);
+  cursor: pointer;
+}
+
 .slide-button {
   width: calc(var(--carousel-slide-width) / 18);
   height: calc(var(--carousel-slide-width) / 18);
   border-radius: 50%;
 }
 
+.slide-button:hover {
+  background-color: var(--button-hover-color);
+  cursor: pointer;
+}
+
 .active {
   opacity: 20%;
+}
+
+button {
+  padding: 0;
 }

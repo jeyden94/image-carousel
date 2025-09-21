@@ -1,11 +1,14 @@
+import arrowIconPath from "./icons/arrow.png";
+
 export function createImageCarousel(carouselParent, imageArray) {
 
-    let intervalId;
-    let activeSlideButton;
     const startingSlideIndex = 0; // Set preferred starting image
+
+    let currentSlideIndex = startingSlideIndex;
+    let intervalId;
+
     document.documentElement.style.setProperty('--number-of-slides', imageArray.length);
     document.documentElement.style.setProperty('--additional-offset', `0px`);
-    let currentSlideIndex = 0;
 
     function startTimer() {
         if (intervalId) {
@@ -36,12 +39,24 @@ export function createImageCarousel(carouselParent, imageArray) {
         for (let i = -1; i < imageArray.length + 1; i++) {
 
             if (i === -1) {
+
+                const slideWrapper = document.createElement("div")
+                slideWrapper.classList.add("slide-wrapper")
+
                 const slide = document.createElement("img");
                 slide.src = imageArray[imageArray.length - 1];
-                carouselDivWide.appendChild(slide)
+
+                slideWrapper.appendChild(slide)
+                carouselDivWide.appendChild(slideWrapper)
 
                 const previousArrow = document.createElement("button")
                 previousArrow.classList.add("prev-slide-button")
+                
+                const arrowIconLeft = document.createElement("img")
+                arrowIconLeft.classList.add("arrow-icon-left")
+                arrowIconLeft.src = arrowIconPath
+
+                previousArrow.append(arrowIconLeft)
                 carouselArrows.appendChild(previousArrow)
                 carouselDivFrame.appendChild(carouselArrows)
 
@@ -49,9 +64,14 @@ export function createImageCarousel(carouselParent, imageArray) {
 
             } else if (i > -1 && i < imageArray.length) {
 
+                const slideWrapper = document.createElement("div")
+                slideWrapper.classList.add("slide-wrapper")
+
                 const slide = document.createElement("img");
                 slide.src = imageArray[i];
-                carouselDivWide.appendChild(slide)
+
+                slideWrapper.appendChild(slide)
+                carouselDivWide.appendChild(slideWrapper)
 
                 const slideButton = document.createElement("button")
                 slideButton.classList.add("slide-button", `slide-button-${i}`)
@@ -61,12 +81,24 @@ export function createImageCarousel(carouselParent, imageArray) {
                 slideButton.addEventListener("click", () => jumpToSlide(i))
 
             } else {
+
+                const slideWrapper = document.createElement("div")
+                slideWrapper.classList.add("slide-wrapper")
+
                 const slide = document.createElement("img");
                 slide.src = imageArray[0];
-                carouselDivWide.appendChild(slide)
+
+                slideWrapper.appendChild(slide)
+                carouselDivWide.appendChild(slideWrapper)
 
                 const nextArrow = document.createElement("button")
                 nextArrow.classList.add("next-slide-button")
+
+                const arrowIconRight = document.createElement("img")
+                arrowIconRight.classList.add("arrow-icon-right")
+                arrowIconRight.src = arrowIconPath
+
+                nextArrow.append(arrowIconRight)
                 carouselArrows.appendChild(nextArrow)
                 carouselDivFrame.appendChild(carouselArrows)
 
@@ -74,7 +106,6 @@ export function createImageCarousel(carouselParent, imageArray) {
             }
         }
 
-        const activeSlideButton = document.querySelector(`.slide-button-${startingSlideIndex}`)
         setActiveSlideButton(startingSlideIndex)
     }
 
@@ -114,8 +145,8 @@ export function createImageCarousel(carouselParent, imageArray) {
     }
 
     function setActiveSlideButton(index) {
-        const newActiveSlideButton = document.querySelector(`.slide-button-${index}`)
-        newActiveSlideButton.classList.add('active');
+        const activeSlideButton = document.querySelector(`.slide-button-${index}`)
+        activeSlideButton.classList.add('active');
     }
 
     startTimer()
