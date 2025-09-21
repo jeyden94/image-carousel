@@ -1,3 +1,9 @@
-# webpack-template
+# A Simple Image Carousel Builder
 
-Template repo based on Odin Project's npm and webpack lessons.
+Usage:
+
+Styles.css - 
+    Assign carousel slide size and hover colors.
+Index.js - 
+    Assign DOM element to serve as carousel parent.
+    Create variable values for image file paths then add each to image array.
