@@ -3,6 +3,9 @@ export function createImageCarousel(carouselParent, imageArray) {
     let intervalId;
     let activeSlideButton;
     const startingSlideIndex = 0; // Set preferred starting image
+    document.documentElement.style.setProperty('--number-of-slides', imageArray.length);
+    document.documentElement.style.setProperty('--additional-offset', `0px`);
+    let currentSlideIndex = 0;
 
     function startTimer() {
         if (intervalId) {
@@ -14,11 +17,6 @@ export function createImageCarousel(carouselParent, imageArray) {
             nextSlide()
         }, 5000)
     }
-    startTimer()
-
-    document.documentElement.style.setProperty('--number-of-slides', imageArray.length);
-    document.documentElement.style.setProperty('--additional-offset', `0px`);
-    let currentSlideIndex = 0;
 
     function createDOMElements(carouselParent, imageArray) {
         
@@ -80,8 +78,6 @@ export function createImageCarousel(carouselParent, imageArray) {
         setActiveSlideButton(startingSlideIndex)
     }
 
-    createDOMElements(carouselParent, imageArray)
-
     function jumpToSlide(index) {
         unsetActiveSlideButton(currentSlideIndex)
         currentSlideIndex = index;
@@ -122,4 +118,6 @@ export function createImageCarousel(carouselParent, imageArray) {
         newActiveSlideButton.classList.add('active');
     }
 
+    startTimer()
+    createDOMElements(carouselParent, imageArray)
 }
